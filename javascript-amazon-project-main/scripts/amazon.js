@@ -1,49 +1,4 @@
-// const products=[{
-//     image: 'images/products/athletic-cotton-socks-6-pairs.jpg',
-//     name:  'Black and Gray Athletic Cotton Socks - 6 Pairs',
-//     ratings: {
-//         stars: 4.5,
-//         count: 87
-//     },
-//     priceCents: 1090
-// }, 
-// // 2nd product details/input
-// {
-//     image: 'images/products/intermediate-composite-basketball.jpg',
-//     name:   'Intermediate Size Basketball',
-//     ratings: {
-//         stars: 4,
-//         count: 127
-//     },
-//     priceCents: 2095
-// },
-// {
-//      image: 'images/products/adults-plain-cotton-tshirt-2-pack-teal.jpg',
-//     name:   ' Adults Plain Cotton T-Shirt - 2 Pack',
-//     ratings: {
-//         stars: 4.5,
-//         count: 56
-//     },
-//     priceCents: 799
-// },
-// {
-//       image: 'https://supersimple.dev/projects/amazon/images/products/black-2-slot-toaster.jpg',
-//     name:   '2 Slot Toaster- Black ',
-//     ratings: {
-//         stars: 5,
-//         count: 2197
-//     },
-//     priceCents: 1899
-// },
-// {
-//       image: 'https://supersimple.dev/projects/amazon/images/products/black-2-slot-toaster.jpg',
-//     name:   '2 Slot Toaster- Black ',
-//     ratings: {
-//         stars: 5,
-//         count: 2197
-//     },
-//     priceCents: 1899
-// }];
+
 
 let productsHTML='';
 
@@ -93,7 +48,10 @@ products.forEach((product)=>{
             Added
           </div>
 
-          <button class="add-to-cart-button button-primary">
+         
+
+          <button class="add-to-cart-button button-primary js-add-to-cart"
+          data-product-id="${product.id}">
             Add to Cart
           </button>
         </div>
@@ -104,3 +62,34 @@ products.forEach((product)=>{
 // console.log(productsHTML);
 
 document.querySelector('.products-grid').innerHTML=productsHTML;
+
+document.querySelectorAll('.js-add-to-cart').forEach((button)=>{
+        button.addEventListener('click',()=>{
+            const productId=(button.dataset.productId);
+
+            let matchingItem;
+            cart.forEach((item)=>{
+                if(productId=== item.productId){
+                    matchingItem= item;
+                }
+            });
+            if(matchingItem){
+              matchingItem.quantity++;
+            }
+            else{
+               cart.push({
+                productId: productId,
+                quantity:1
+            });
+          }
+
+          let cartQuantity=0;
+          cart.forEach((item)=>{
+              cartQuantity+=item.quantity;
+          });
+
+          document.querySelector('.js-cart-quantity').innerHTML = cartQuantity;
+
+          
+        });
+});
