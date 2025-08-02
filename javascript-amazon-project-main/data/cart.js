@@ -17,7 +17,9 @@ function saveToStorage(){
 }
 
 
-export function addToCart(productId){
+export function addToCart(productId,quantity=1){
+    
+
      let matchingItem;
             cart.forEach((cartitem)=>{
                 if(productId=== cartitem.productId){
@@ -25,12 +27,12 @@ export function addToCart(productId){
                 }
             });
             if(matchingItem){
-              matchingItem.quantity++;
+              matchingItem.quantity+=quantity;
             }
              else{
                cart.push({
                 productId: productId,
-                quantity:1
+                quantity:quantity
             });
           }
 
