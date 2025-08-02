@@ -2,6 +2,8 @@ import {cart, addToCart } from '../data/cart.js';
 import { products } from '../data/products.js';
 import { formatCurrency } from './utils/money.js';
 
+import { updateCartQuantity } from './utils/currentQuantity.js';
+import { checkoutQuantity } from './utils/currentQuantity.js';
 
 let productsHTML='';
 
@@ -46,7 +48,7 @@ products.forEach((product)=>{
 
           <div class="product-spacer"></div>
 
-          <div class="added-to-cart">
+          <div class="added-to-cart js-added-to-cart-${product.id}">
             <img src="images/icons/checkmark.png">
             Added
           </div>
@@ -62,21 +64,23 @@ products.forEach((product)=>{
 
         
 });
-// console.log(productsHTML);
+
 
 document.querySelector('.products-grid').innerHTML=productsHTML;
 
 
 
-function updateCartQuantity(){
-         let cartQuantity=0;
-          cart.forEach((cartitem)=>{
-              cartQuantity+=cartitem.quantity;
-          });
+// function updateCartQuantity(){
+//          let cartQuantity=0;
+//           cart.forEach((cartitem)=>{
+//               cartQuantity+=cartitem.quantity;
+//           });
 
-          document.querySelector('.js-cart-quantity').innerHTML = cartQuantity;
+//           document.querySelector('.js-cart-quantity').innerHTML = cartQuantity;
 
-}
+// }
+
+
 document.querySelectorAll('.js-add-to-cart').forEach((button)=>{
         button.addEventListener('click',()=>{
            const productId=(button.dataset.productId);
@@ -93,3 +97,27 @@ document.querySelectorAll('.js-add-to-cart').forEach((button)=>{
           
         });
 });
+
+
+document.querySelectorAll('.js-add-to-cart').forEach((button)=>{
+  let timeoutID=null;
+  button.addEventListener('click',()=>{
+    const productId=button.dataset.productId;
+    const addedToCart = document.querySelector(`.js-added-to-cart-${productId}`);
+    if(!addedToCart){
+      return;
+    }
+    addedToCart.style.opacity='1';
+
+    if(timeoutID){
+      clearTimeout(timeoutID);
+    }
+      timeoutID=setTimeout(()=>{
+      addedToCart.style.opacity='0';
+      timeoutID=null;
+    },2000);
+  });
+});
+
+document.querySelector('.js-cart-quantity').innerHTML= checkoutQuantity();
+
