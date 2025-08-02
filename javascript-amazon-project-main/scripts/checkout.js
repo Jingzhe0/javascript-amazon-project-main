@@ -1,6 +1,7 @@
 import {cart, removeFromCart} from '../data/cart.js';
 import {products} from '../data/products.js';
 import { formatCurrency } from './utils/money.js';
+import { checkoutQuantity } from './utils/currentQuantity.js';
 
 let cartSummaryHTML='';
 
@@ -39,7 +40,8 @@ cart.forEach((cartItem)=>{
                   <span>
                     Quantity: <span class="quantity-label">${cartItem.quantity}</span>
                   </span>
-                  <span class="update-quantity-link link-primary">
+                  <span class="update-quantity-link link-primary
+                  js-update-link">
                     Update
                   </span>
                   <span class="delete-quantity-link link-primary  js-delete-link" data-product-id='${matchingProduct.id}'>
@@ -99,8 +101,11 @@ cart.forEach((cartItem)=>{
         `;
 });
 
+// shows cart order list
 document.querySelector('.js-order-summary').innerHTML=cartSummaryHTML;
 
+
+// makes the delete button work 
 document.querySelectorAll('.js-delete-link').forEach((link)=>{
     link.addEventListener('click',()=>{
       const productId=link.dataset.productId;
@@ -114,27 +119,29 @@ document.querySelectorAll('.js-delete-link').forEach((link)=>{
 
     );
       container.remove();
-      
      });
+    
 });
 
-function checkoutQuantity(){
+// updates the checkout header quantity
+document.querySelector(`.js-checkout-item-quantity`).textContent=`  ${(checkoutQuantity())}-Items`;
 
-  function updateCartQuantity(){
-          let cartQuantity=0;
-            cart.forEach((cartitem)=>{
-                cartQuantity+=cartitem.quantity;
-            });
-            const CartQuantity=
-            document.querySelector('.js-cart-quantity');
-            if(CartQuantity){
-              CartQuantity.innerHTML = cartQuantity;
-            }
-            return cartQuantity;
 
-  }
 
-  document.querySelector(`.js-checkout-item-quantity`).textContent=`  ${(updateCartQuantity())}-Items`;
-}
+// updates the items quantity
+// does'nt works on clicking delete
+document.querySelector('.js-total-item-payment').innerHTML= `Items (${checkoutQuantity()}):`;
 
-checkoutQuantity();
+
+// updating the item quanity
+document.querySelectorAll('.js-update-link').forEach((link)=>{
+  link.addEventListener('click',()=>{
+      link.innerHTML='Update <input type="number">';
+      // console.log('update');
+
+  })
+
+});
+`
+      // Update <input type='number'> `;
+// js-update-link
